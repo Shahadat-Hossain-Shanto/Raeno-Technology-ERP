@@ -1,0 +1,143 @@
+[1mdiff --cc resources/views/layouts/master.blade.php[m
+[1mindex 10d879a,2c64d73..0000000[m
+[1m--- a/resources/views/layouts/master.blade.php[m
+[1m+++ b/resources/views/layouts/master.blade.php[m
+[36m@@@ -51,9 -50,6 +51,9 @@@[m
+      <!-- Daterange picker -->[m
+      <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">[m
+  [m
+[32m +[m
+[31m-   [m
+[32m++[m
+[32m +[m
+      <!-- summernote -->[m
+      <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">[m
+  [m
+[36m@@@ -290,8 -287,15 +290,17 @@@[m
+                                      </p>[m
+                                  </a>[m
+                              </li>[m
+[31m-                         @endhasrole[m
+[31m-                         [m
+[32m++[m
+[32m+                         @endcan[m
+[32m+                         {{-- <li class="nav-item">[m
+[32m+             <a href="role-list" class="nav-link">[m
+[32m+               <i class="nav-icon fas fa-user-edit"></i>[m
+[32m+               <p>[m
+[32m+                 Roles[m
+[32m+               </p>[m
+[32m+             </a>[m
+[32m+           </li> --}}[m
+[32m++[m
+                          <li class="nav-item">[m
+                              <a href="employee-list" class="nav-link">[m
+                                  <i class="nav-icon fas fa-users-cog"></i>[m
+[36m@@@ -342,12 -346,13 +351,12 @@@[m
+      <!-- jQuery -->[m
+      @yield('jQuery')[m
+  [m
+[31m- <!-- jQuery -->[m
+[31m- <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>[m
+[32m+     <!-- jQuery -->[m
+[31m -[m
+[31m -[m
+[32m+     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>[m
+  [m
+[32m +[m
+[31m- <!-- jQuery UI 1.11.4 -->[m
+[31m- <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>[m
+[32m+     <!-- jQuery UI 1.11.4 -->[m
+[32m+     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>[m
+  [m
+      <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->[m
+      <script>[m
+[36m@@@ -373,12 -378,9 +382,12 @@@[m
+      <!-- ChartJS -->[m
+      <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>[m
+  [m
+[31m- <!-- Sparkline -->[m
+[31m- <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>[m
+[32m+     <!-- Sparkline -->[m
+[32m+     <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>[m
+  [m
+[32m +    <!-- Sparkline -->[m
+[32m +    <script src="{{ asset('plugins/sparklines/sparkline.js') }}"></script>[m
+[32m +[m
+      <!-- JQVMap -->[m
+      <script src="{{ asset('plugins/jqvmap/jquery.vmap.min.js') }}"></script>[m
+      <script src="{{ asset('plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>[m
+[36m@@@ -416,13 -418,6 +425,13 @@@[m
+      <!-- AdminLTE dashboard demo (This is only for demo purposes) -->[m
+      <!-- <script src="dist/js/pages/dashboard.js"></script> -->[m
+  [m
+[32m +[m
+[31m- <!-- AdminLTE for demo purposes -->[m
+[31m- <!-- <script src="dist/js/demo.js"></script> -->[m
+[32m++    <!-- AdminLTE for demo purposes -->[m
+[32m++    <!-- <script src="dist/js/demo.js"></script> -->[m
+[32m +[m
+[31m- <!-- AdminLTE dashboard demo (This is only for demo purposes) -->[m
+[31m- <!-- <script src="dist/js/pages/dashboard.js"></script> -->[m
+[32m++    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->[m
+[32m++    <!-- <script src="dist/js/pages/dashboard.js"></script> -->[m
+[32m +[m
+  </body>[m
+  [m
+  </html>[m
+[1mdiff --cc routes/web.php[m
+[1mindex 92ab9c9,f64a578..0000000[m
+[1m--- a/routes/web.php[m
+[1m+++ b/routes/web.php[m
+[36m@@@ -195,25 -193,7 +195,25 @@@[m [mRoute::put('/menu-edit/{id}', 'MenuCont[m
+  Route::delete('/menu-delete/{id}', 'MenuController@destroy');[m
+  [m
+  [m
+[31m -Route::middleware(['role:admin|admin2'])->group(function () {[m
+[32m +//Client[m
+[31m- Route::post('/client-image','ClientImageController@store');[m
+[32m++Route::post('/client-image', 'ClientImageController@store');[m
+[32m +Route::get('/client-image/{imageName}', 'ClientImageController@image');[m
+[31m- Route::post('/client-create','ClientController@store');[m
+[31m- Route::get('/client-list/{id}','ClientController@list');[m
+[32m++Route::post('/client-create', 'ClientController@store');[m
+[32m++Route::get('/client-list/{id}', 'ClientController@list');[m
+[32m +[m
+[32m +//User Information[m
+[32m +Route::post('/login-data', 'Auth\LoginController@check');[m
+[32m +[m
+[32m +//Due Payment[m
+[32m +Route::post('/due-payment', 'DuePaymentController@store');[m
+[32m +Route::get('/due-list', 'DuePaymentController@list');[m
+[32m +Route::get('/due-list/{id}', 'DuePaymentController@dueList');[m
+[32m +[m
+[32m +//Reports[m
+[32m +Route::get('/reports', 'ReportController@index');[m
+[32m +Route::post('/reports', 'ReportController@showReport');[m
+[32m +[m
+[32m +Route::middleware(['role:admin'])->group(function () {[m
+  [m
+      Route::get('/role-list', [RolesController::class, 'index'])->name('admin.roles');[m
+      Route::get('/create-user', 'Auth\AdminController@regUser')->name('user.create.view');[m
+[36m@@@ -234,3 -214,20 +234,21 @@@[m
+      Route::delete('/user-delete/{id}', 'Auth\AdminController@userDestroy')->name('admin.users.destroy');[m
+  });[m
+  [m
+[32m++[m
+[32m+ // Route::get('/role-list', [RolesController::class, 'index'])->name('admin.roles');[m
+[32m+ // Route::get('/create-user', 'Auth\AdminController@regUser')->name('user.create.view');[m
+[32m+ // Route::post('/create-user', 'Auth\AdminController@storeUser')->name('user.create');[m
+[32m+ // // Route::get('/role-create', 'Auth\RolesController@create')->name('admin.roles.create.view');[m
+[32m+ // Route::get('/roles-create', [RolesController::class, 'create'])->name('admin.roles.create.view');[m
+[32m+ // Route::post('/role-create', 'Auth\RolesController@store')->name('admin.roles.create');[m
+[32m+ [m
+[32m+ // Route::get('/role-edit/{id}', 'Auth\RolesController@edit')->name('admin.roles.edit.view');[m
+[32m+ // Route::put('/role-edit/{id}', 'Auth\RolesController@update')->name('admin.roles.update');[m
+[32m+ // Route::delete('/role-delete/{id}', 'Auth\RolesController@destroy')->name('admin.roles.destroy');[m
+[32m+ [m
+[32m+ [m
+[32m+ // //users[m
+[32m+ // Route::get('/users-list', 'Auth\AdminController@userList')->name('admin.user.list');[m
+[32m+ // Route::get('/user-edit/{id}', 'Auth\AdminController@userEdit')->name('admin.user.edit.view');[m
+[32m+ // Route::put('/user-edit/{id}', 'Auth\AdminController@userUpdate')->name('admin.users.update');[m
+[32m+ // Route::delete('/user-delete/{id}', 'Auth\AdminController@userDestroy')->name('admin.users.destroy');[m
